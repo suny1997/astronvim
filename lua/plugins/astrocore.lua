@@ -64,6 +64,37 @@ return {
 
         -- setting a mapping to false will disable it
         -- ["<C-S>"] = false,
+        -- 去掉wsl时粘贴的^M
+        ["p"] = {
+          function()
+            if not os.getenv "WSLENV" then vim.cmd "normal! p" end
+
+            function Trim()
+              local save = vim.fn.winsaveview()
+              -- 使用 Vim 命令去除空格
+              vim.cmd "keeppatterns %s/\\s\\+$\\|\\r$//e"
+              vim.fn.winrestview(save)
+            end
+            vim.cmd "normal! p"
+            -- 调用 Trim 函数
+            vim.schedule(function() Trim() end)
+          end,
+        },
+        ["P"] = {
+          function()
+            if not os.getenv "WSLENV" then vim.cmd "normal! P" end
+
+            function Trim()
+              local save = vim.fn.winsaveview()
+              -- 使用 Vim 命令去除空格
+              vim.cmd "keeppatterns %s/\\s\\+$\\|\\r$//e"
+              vim.fn.winrestview(save)
+            end
+            vim.cmd "normal! P"
+            -- 调用 Trim 函数
+            vim.schedule(function() Trim() end)
+          end,
+        },
       },
     },
     autocmds = {
